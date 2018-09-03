@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <style>
+        #signOut{
+            display: none;
+        }
+    </style>
+    <script>
+        var socket=io('http://localhost:8090');
+        $(function () {
+           /* if($.cookie("islogin")){
+                var username = $.cookie("islogin");
+                $('#box').html('欢迎!'+username);
+                $('#login').hide();
+                $('#signOut').show();
+            }else {
+                $('#signOut').hide();
+            }*/
+            if($.cookie("islogin")){
+                var loginMes = $.cookie("islogin");
+                var MesArr = loginMes.substring(3,loginMes.length-1).split(',');
+                var MesArrR=[];
+                for(let i=0;i<MesArr.length;i++){
+                    MesArrR[i]=MesArr[i].substring(1,MesArr[i].length-1)
+                }
+                $('#box').html('欢迎!'+MesArrR[1]);
+                $('#login').hide();
+                $('#signOut').show();
+            }else {
+                $('#signOut').hide();
+            }
+            $('#sign').on('click',function () {
+                $.get('signOut','1',function (data) {
+                    if(data){
+                        $('#box').html('');
+                        $('#login').show();
+                        $('#signOut').hide();
+                    }
+                })
+            })
+        })
+    </script>
+
+</head>
+<body>
+<a href="login.html" id="login">登录</a>
+<div id="signOut">
+    <a id="sign" href="javascript:;">退出</a>
+    <a href="/personalCenter">个人中心</a>
+</div>
+
+<div id="box"></div>
+</body>
+</html>

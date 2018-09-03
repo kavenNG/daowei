@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+        $(function () {
+            $('#resetPsw').on('click',function () {
+                $.post(
+                    'reset',
+                    {
+                        email:$('#inputEmail3').val()
+                    },
+                    function (data) {
+                        if(data === true){
+                            window.location.href='findPsw.html';
+                        }else {
+                            $('#box').html(data);
+                        }
+                    }
+                )
+            })
+        })
+    </script>
+</head>
+<body>
+<form method="post">
+    <div id="box">验证邮箱</div>
+    <input type="text" name="email" id="inputEmail3">
+    <input type="button" id="resetPsw" value="重置密码">
+</form>
+</body>
+</html>

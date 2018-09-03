@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+        $(function () {
+            $.post(
+                'personal',
+                '1',
+                function (data) {
+                    $('#username span').html(data.username);
+                    $('#email').html(data.email);
+                    $('#phoneNum').html(data.phoneNum);
+                    $('#userAddress li:first-child').html(data.comAddress);
+                    $('#avatar')[0].src='images/'+data.avatar;
+                }
+            );
+            $('#edit').on('click',function () {
+                $('#editVer').show();
+            });
+            $('#cancel').on('click',function () {
+                $('#editVer').hide();
+            });
+            $('#confirm').on('click',function () {
+                $.post(
+                    'modify',
+                    {
+                        password:$('#editVer input[name=password]').val()
+                    },
+                    function (data) {
+                        if(data){
+                            alert('可以修改了');
+                            $('#editVer').hide();
+
+                        }else {
+                            alert('密码错误');
+                        }
+                    }
+                )
+            });
+            $('#file').on('change',function () {
+                console.log($(this).val())
+                var animateimg = $(this).val();
+                var myImg = animateimg.split('\\')[animateimg.split('\\').length-1];  //得到文件名字
+                console.log(myImg);
+                var ext = '.'+myImg.split('.')[1].toUpperCase();  //文件后缀  .PNG等
+                var file =$(this).get(0).files[0];  //获取上传的文件
+                var fileSize = file.size;   //文件大小
+                var maxSize = 1048576;   //最大1M，这里不做限制
+                console.log(fileSize);
+                if(ext !='.PNG' && ext !='.GIF' && ext !='.JPG' && ext !='.JPEG' && ext !='.BMP'){
+                   alert('文件类型错误,请上传图片类型');
+                   return false;
+                }else {
+                    document.form1.submit();
+                }
+
+            })
+        })
+    </script>
+    <style>
+        #avatar{
+            width: 60px;
+        }
+        label{
+            overflow: hidden;
+            position: relative;
+        }
+        input[type='file']{
+            position: absolute;
+            left: -100px;
+            top:-100px;
+            width: 10px;
+        }
+        ul li{
+            cursor: pointer;
+        }
+        #editVer{
+            width:200px;
+            height:200px;
+            display: none;
+            position: absolute;
+            background-color: #eeeeee;
+            border: 1px #000000 solid;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <input type="button" value="编辑" id="edit"><br><br><br><br>
+    <form name="form1" action="avatarUpload" method="post" enctype="multipart/form-data">
+        <label><img id="avatar" src=""><br>
+            <input type="file" name="avatar" id="file"></label>
+    </form>
+    <div id="username">用户名:<span></span></div>
+    <h3>账户</h3>
+    <ul id="userMes">
+        <li>邮箱: <span id="email"></span></li>
+        <li>手机: <span id="phoneNum"></span></li>
+        <li>密码: <span>******</span></li>
+    </ul>
+    <h3>常用地址</h3>
+    <ul id="userAddress">
+        <li></li>
+        <li></li>
+    </ul>
+    <form id="editVer">
+        <div>请输入密码</div>
+        <input type="password" name="password"><br>
+        <input type="button" id="cancel" value="取消">
+        <input type="button" id="confirm" value="确定">
+    </form>
+</div>
+</body>
+</html>

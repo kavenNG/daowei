@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+        $(function () {
+            $("#confirm").on('click',function () {
+                $.post(
+                    'reLogin',
+                    {
+                        password:$('input[name=newPassword]').val()
+                    },
+                    function (data) {
+                        if(data === true){
+                            window.location.href='login.html';
+                        }else {
+                            $('#box').html(data);
+                        }
+                    }
+                )
+            })
+        })
+    </script>
+</head>
+<body>
+<form action="/reLogin" method="post">
+    <span id="box">验证成功后可以修改密码</span><br>
+    <input type="password" name="newPassword"><br>
+    <input type="password" name="newPassword2"><br>
+    <input type="button" id="confirm" value="确认修改">
+</form>
+</body>
+</html>
